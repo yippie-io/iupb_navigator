@@ -15,6 +15,8 @@ class Typo3EmailDecoder
     @context.eval "decryptLink('#{secret}',-1)"
   end
   
+  private 
+  
   def js
     <<-JS
     var decryptCharcode = function (n, start, end, offset) {n=n+offset;if(offset>0&&n>end){n=start+(n-end-1);}else if(offset<0&&n<start){n=end-(start-n-1);}
