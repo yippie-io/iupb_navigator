@@ -1,6 +1,6 @@
 class StudiesController < ApplicationController
   def index
-    render json: Faculty.find(params[:faculty_id]).studies
+    render json: Faculty.find(params[:faculty_id]).studies.order(:name)
   end
 
   def show

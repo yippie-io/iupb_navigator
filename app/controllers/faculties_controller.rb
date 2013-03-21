@@ -1,6 +1,6 @@
 class FacultiesController < ApplicationController
   def index
-    render json: Faculty.all
+    render json: Faculty.order(:name)
   end
 
   def show

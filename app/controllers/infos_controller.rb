@@ -4,7 +4,7 @@ class InfosController < ApplicationController
   end
 
   def show
-    render json: Faculty.find(params[:id])
+    render json: Info.find(params[:id])
   end
 
   def search
