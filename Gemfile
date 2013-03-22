@@ -32,4 +32,5 @@ gem 'thin'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-gem 'dalli'
+gem 'dalli', :group => 'production'
+gem 'newrelic_rpm', :group => 'production'
