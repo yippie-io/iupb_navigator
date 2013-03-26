@@ -26,7 +26,11 @@ class ZSBCrawler
     infos = studies.flat_map do |study|
       find_infos_for_study(study)
     end
-    infos.each(&:save)
+    infos.each(&:save)    
+  end
+  
+  def relate_role(info, role_name)
+    info.role = Role.find_or_create_by_name(role_name.to_s)
   end
   
   def find_faculties
@@ -58,7 +62,8 @@ class ZSBCrawler
           link = nil
         end
         email = @decoder.decode_href(contact.css("a").last.attr("href"))
-        Info.new(name: name_text, description: contact.text, link: link, study_id: study.id, custom_role_name: role_name, mail: email)
+        info_obj = Info.new(name: name_text, description: contact.text, link: link, study_id: study.id, custom_role_name: role_name, mail: email)
+        relate_role info_obj, role_name
       rescue
         puts "ERROR! at " + root_host + root_path + "?tx_upbstudy_pi2%5BselectedFacultyId%5D=#{study.faculty.source_id.to_s}&tx_upbstudy_pi2%5BselectedFacMajorId%5D=#{study.source_id.to_s}"
         puts "CONTACTCARD: #{contact.inspect}"

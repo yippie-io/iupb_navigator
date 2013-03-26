@@ -1,8 +1,16 @@
 class InfoSerializer < ActiveModel::Serializer
-  attributes :id, :name, :role_text, :mail, :link, :full_text
+  attributes :id, :name, :role_text, :role_description, :mail, :link, :full_text
   
   def role_text
-    object.custom_role_name
+    if object.role.present?
+      object.role.name
+    else
+      object.custom_role_name
+    end
+  end
+  
+  def role_description
+    object.role.try(:description)
   end
 
   def full_text
