@@ -71,8 +71,9 @@ class ZSBCrawler
             name_text = contact.content.split("<br>").first
             link = nil
           end
+          contact_text = contact.text.sub("hier", "auf der verlinkten Seite")
           email = @decoder.decode_href(contact.css("a").last.attr("href"))
-          info_obj = Info.new(name: name_text, description: contact.text, link: link, study_id: study.id, custom_role_name: role_name, mail: email)
+          info_obj = Info.new(name: name_text, description: contact_text, link: link, study_id: study.id, custom_role_name: role_name, mail: email)
           relate_role info_obj, role_name
         end
       rescue
