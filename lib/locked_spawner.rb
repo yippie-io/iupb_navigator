@@ -4,10 +4,11 @@ class LockedSpawner
       return false
     else
       Spawner.spawn do
-        ::REDIS.reconnect if defined?(::REDIS)
-        ::REDIS.set "crawling", 1 if defined?(::REDIS)
+        redis = Redis.new(::REDIS_URL) if defined?(::REDIS)
+        redis.reconnect if defined?(redis)
+        redis.set "crawling", 1 if defined?(redis)
         ZSBCrawler.new.fetch_all true
-        ::REDIS.set "crawling", 0 if defined?(::REDIS)
+        redis.set "crawling", 0 if defined?(redis)
       end
       return true
     end
