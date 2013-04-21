@@ -24,8 +24,8 @@ gem 'execjs'
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
 
-# Use thin as the app server
-gem 'thin'
+# Use puma as the app server
+gem 'puma'
 
 # Deploy with Capistrano
 # gem 'capistrano', :group => :development
