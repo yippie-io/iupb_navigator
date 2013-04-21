@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/drsharp/spawner.git
+  revision: d81ceb0b084f95c47c2503086e2563cbe684a452
+  specs:
+    spawner (2.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -84,6 +90,7 @@ GEM
     rake (10.0.3)
     rdoc (3.12.2)
       json (~> 1.4)
+    redis (3.0.3)
     ref (1.0.2)
     sprockets (2.2.2)
       hike (~> 1.2)
@@ -118,6 +125,8 @@ DEPENDENCIES
   rack-jsonp-middleware
   rails (= 3.2.12)
   rails-api
+  redis
+  spawner!
   sqlite3
   therubyracer
   thin

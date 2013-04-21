@@ -34,7 +34,7 @@ class ZSBCrawler
     infos = studies.flat_map do |study|
       find_infos_for_study(study)
     end
-    infos.flatten.each(&:save)    
+    infos.flatten.each(&:save)   
   end
   
   def relate_role(info, role_name)

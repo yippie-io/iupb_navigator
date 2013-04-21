@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>iUPB Navigator API - Admin</title>
+	<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+    <style type="text/css" media="screen">
+      body {
+        margin: 0;
+        margin-bottom: 25px;
+        padding: 0;
+        background-color: #f0f0f0;
+        font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+        font-size: 13px;
+        color: #333;
+      }
+
+      h1 {
+        font-size: 28px;
+        color: #000;
+      }
+
+      a  {color: #03c}
+      a:hover {
+        background-color: #03c;
+        color: white;
+        text-decoration: none;
+      }
+
+
+      #page {
+        background-color: #f0f0f0;
+        width: 750px;
+        margin: 0;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #content {
+        float: left;
+        background-color: white;
+        border: 3px solid #aaa;
+        border-top: none;
+        padding: 25px;
+        width: 500px;
+      }
+
+      #sidebar {
+        float: right;
+        width: 175px;
+      }
+
+      #footer {
+		margin-left: 50px;
+        clear: both;
+      }
+
+      #header, #about, #getting-started {
+        padding-left: 75px;
+        padding-right: 30px;
+      }
+
+
+      #header {
+        height: 64px;
+      }
+      #header h1, #header h2 {margin: 0}
+      #header h2 {
+        color: #888;
+        font-weight: normal;
+        font-size: 16px;
+      }
+
+
+      #about h3 {
+        margin: 0;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      #about-content {
+        background-color: #ffd;
+        border: 1px solid #fc0;
+        margin-left: -55px;
+        margin-right: -10px;
+      }
+      #about-content table {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 11px;
+        border-collapse: collapse;
+      }
+      #about-content td {
+        padding: 10px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+      }
+      #about-content td.name  {color: #555}
+      #about-content td.value {color: #000}
+
+      #about-content ul {
+        padding: 0;
+        list-style-type: none;
+      }
+
+      #about-content.failure {
+        background-color: #fcc;
+        border: 1px solid #f00;
+      }
+      #about-content.failure p {
+        margin: 0;
+        padding: 10px;
+      }
+
+
+      #getting-started {
+        border-top: 1px solid #ccc;
+        margin-top: 25px;
+        padding-top: 15px;
+      }
+      #getting-started h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      #getting-started h2 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: normal;
+        color: #333;
+        margin-bottom: 25px;
+      }
+      #getting-started ol {
+        margin-left: 0;
+        padding-left: 0;
+      }
+      #getting-started li {
+        font-size: 18px;
+        color: #888;
+        margin-bottom: 25px;
+      }
+      #getting-started li h2 {
+        margin: 0;
+        font-weight: normal;
+        font-size: 18px;
+        color: #333;
+      }
+      #getting-started li p {
+        color: #555;
+        font-size: 13px;
+      }
+
+
+      #sidebar ul {
+        margin-left: 0;
+        padding-left: 0;
+      }
+      #sidebar ul h3 {
+        margin-top: 25px;
+        font-size: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+      #sidebar li {
+        list-style-type: none;
+      }
+      #sidebar ul.links li {
+        margin-bottom: 5px;
+      }
+
+      .filename {
+        font-style: italic;
+      }
+    </style>
+   
+  </head>
+  <body>
+    <div id="page">
+      <div id="sidebar">
+        <ul id="sidebar-items">
+          <li>
+			<p><a href="http://www.i-upb.de"><img src="http://www.i-upb.de/apple-touch-icon.png" alt="iUPB Logo"></a></p>
+            <h3>Links</h3>
+            <ul class="links">
+              <li><a href="http://www.i-upb.de/pages/navigator?locale=de">Navigator &ouml;ffnen</a></li>
+              <li><a href="http://www.i-upb.de/contact-us?locale=de">Hilfe</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div id="content">
+        <div id="header">
+          <h1>iUPB Navigator Admin</h1>
+          <h2>Datenaktualisierung f&uuml;r den iUBP Navigator.</h2>
+        </div>
+
+
+        <div id="getting-started">
+		  <h1>Passwort eingeben:</h1>
+		  <p id="pw_field">
+		  	<input type="password" id="pw">
+		  </p>
+          <h1>Status</h1>
+          <p id="status">Lade...</p>
+
+		<h1>Crawler laufen lassen</h1>
+		<p><a id="start_crawler_link" href="#"><strong>Crawler starten!</strong></a></p>
+        </div>
+      </div>
+
+      <div id="footer">part of <a href="http://www.i-upb.de">iUPB</a> / made by <a href="http://www.yippie.io">yippie.io</a> / powered by <a href="http://rubyonrails.org">Rails</a> / data by <a href="http://zsb.upb.de">ZSB</a></div>
+    </div>
+
+	<script>
+	var showStatus = function()
+	{
+		if (this.readyState == 4)
+		{
+			document.getElementById("status").innerHTML = this.responseText;
+		}
+	};
+	
+	// Common function to initialize XML Http Request object
+	function getHttpRequestObject()
+	{
+		// Define and initialize as false
+		var xmlHttpRequst = false;
+
+		// Mozilla/Safari/Non-IE
+	    if (window.XMLHttpRequest)
+		{
+	        xmlHttpRequst = new XMLHttpRequest();
+	    }
+	    // IE
+	    else if (window.ActiveXObject)
+		{
+	        xmlHttpRequst = new ActiveXObject("Microsoft.XMLHTTP");
+	    }
+		return xmlHttpRequst;
+	}
+
+	// Does the AJAX call to URL specific with rest of the parameters
+	function doAjax(url, method, async, responseHandler, data)
+	{
+		// Set the variables
+		url = url || "";
+		method = method || "GET";
+		async = async || true;
+		data = data || null;
+
+		if(url == "")
+		{
+			alert("URL can not be null/blank");
+			return false;
+		}
+		var xmlHttpRequst = getHttpRequestObject();
+
+		// If AJAX supported
+		if(xmlHttpRequst != false)
+		{
+			// Open Http Request connection
+			if(method == "GET")
+			{
+				url = url + "?noCache=" + Math.floor((Math.random()*1000)+1) + "&" + data;
+				data = null;
+			}
+			xmlHttpRequst.open(method, url, async);
+			// Set request header (optional if GET method is used)
+			if(method == "POST")
+			{
+				xmlHttpRequst.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			}
+			// Assign (or define) response-handler/callback when ReadyState is changed.
+			xmlHttpRequst.onreadystatechange = responseHandler;
+			// Send data
+			xmlHttpRequst.send(data);
+		}
+		else
+		{
+			alert("Please use browser with Ajax support!");
+		}
+	}
+	
+	var getStatus = function(){
+		doAjax("/admin/status", "GET", true, showStatus, "pw=" + document.getElementById("pw").value);
+	};
+	
+		document.getElementById("start_crawler_link").addEventListener("click", function(){
+			doAjax("/admin/crawl", "POST", true, showStatus, "pw=" + document.getElementById("pw").value);
+			return false;
+		});
+		window.setInterval(getStatus, 5000);
+	</script>
+  </body>
+</html>

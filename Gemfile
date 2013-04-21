@@ -34,4 +34,6 @@ gem 'thin'
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'dalli', :group => 'production'
+gem 'redis'
+gem "spawner", :git => 'git://github.com/drsharp/spawner.git'
 gem 'newrelic_rpm', :group => 'production'

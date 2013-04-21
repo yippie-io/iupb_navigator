@@ -1,5 +1,6 @@
 IupbNavigator::Application.routes.draw do
 
+  get "admin/status", as: "crawl_status"
   post "admin/crawl", as: "crawl"
 
   resources :faculties, only: [:show, :index] do
