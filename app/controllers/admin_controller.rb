@@ -1,14 +1,16 @@
 class AdminController < ApplicationController
+  skip_filter :set_cache_header
+  
   def status
     if defined?(::REDIS)
       @status = (::REDIS.get("crawling") == 1 ? "Crawler läuft gerade..." : "Crawler läuft nicht")
     else
       @status = "unbekannt - kein Redis verfügbar"
     end
-    render json: (params[:pw] == pw ? @status : "Passwort fehlerhaft, bitte (noch einmal) eingeben")
+    render json: (params[:password] == pw ? @status : "Passwort fehlerhaft, bitte (noch einmal) eingeben")
   end
   def crawl
-    if params[:pw] == pw && LockedSpawner.crawl
+    if params[:password] == pw && LockedSpawner.crawl
       render json: "Crawler gestartet"
     else
       render json: "Oops... Fehler beim Starten des Crawlers, evtl. läuft dieser schon oder das Passwort ist falsch."

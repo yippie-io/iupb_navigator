@@ -281,11 +281,11 @@
 	}
 	
 	var getStatus = function(){
-		doAjax("/admin/status", "GET", true, showStatus, "pw=" + document.getElementById("pw").value);
+		doAjax("/admin/status", "GET", true, showStatus, "password=" + document.getElementById("pw").value);
 	};
 	
 		document.getElementById("start_crawler_link").addEventListener("click", function(){
-			doAjax("/admin/crawl", "POST", true, showStatus, "pw=" + document.getElementById("pw").value);
+			doAjax("/admin/crawl", "POST", true, showStatus, "password=" + document.getElementById("pw").value);
 			return false;
 		});
 		window.setInterval(getStatus, 5000);
