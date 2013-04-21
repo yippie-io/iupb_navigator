@@ -14,7 +14,15 @@ class ZSBCrawler
     @decoder = Typo3EmailDecoder.new
   end
   
-  def fetch_all
+  def self.cleanup
+    Info.delete_all
+    Study.delete_all
+    Faculty.delete_all
+  end
+  
+  def fetch_all(cleanup_before = false)
+    self.class.cleanup if cleanup_before
+    
     faculties = find_faculties
     faculties.each(&:save)
 
@@ -26,11 +34,12 @@ class ZSBCrawler
     infos = studies.flat_map do |study|
       find_infos_for_study(study)
     end
-    infos.each(&:save)    
+    infos.flatten.each(&:save)    
   end
   
   def relate_role(info, role_name)
     info.role = Role.find_or_create_by_name(role_name.to_s)
+    info
   end
   
   def find_faculties
@@ -52,18 +61,20 @@ class ZSBCrawler
     doc.css("#detailtable tr").map do |info|
       begin
         role_name = info.css("b").first.content
-        contact = info.css(".studyContact").first
-        name = contact.css("a[target='_blank']").first
-        if name
-          name_text = name.content
-          link = name.attr("href")
-        else
-          name_text = contact.content.split("<br>").first
-          link = nil
+        contacts = info.css(".studyContact")
+        contacts.map do |contact|
+          name = contact.css("a[target='_blank']").first
+          if name
+            name_text = name.content
+            link = name.attr("href")
+          else
+            name_text = contact.content.split("<br>").first
+            link = nil
+          end
+          email = @decoder.decode_href(contact.css("a").last.attr("href"))
+          info_obj = Info.new(name: name_text, description: contact.text, link: link, study_id: study.id, custom_role_name: role_name, mail: email)
+          relate_role info_obj, role_name
         end
-        email = @decoder.decode_href(contact.css("a").last.attr("href"))
-        info_obj = Info.new(name: name_text, description: contact.text, link: link, study_id: study.id, custom_role_name: role_name, mail: email)
-        relate_role info_obj, role_name
       rescue
         puts "ERROR! at " + root_host + root_path + "?tx_upbstudy_pi2%5BselectedFacultyId%5D=#{study.faculty.source_id.to_s}&tx_upbstudy_pi2%5BselectedFacMajorId%5D=#{study.source_id.to_s}"
         puts "CONTACTCARD: #{contact.inspect}"
