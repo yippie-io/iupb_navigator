@@ -3,7 +3,7 @@ class AdminController < ApplicationController
   
   def status
     if defined?(::REDIS)
-      @status = (::REDIS.get("crawling") == 1 ? "Crawler läuft gerade..." : "Crawler läuft nicht")
+      @status = (::REDIS.get("crawling") == "1" ? "Crawler läuft gerade..." : "Crawler läuft nicht")
     else
       @status = "unbekannt - kein Redis verfügbar"
     end
